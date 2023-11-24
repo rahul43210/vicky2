@@ -1,5 +1,6 @@
 package com.openapi.oprnAPI.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,8 +22,10 @@ public class CarService {
 		if(car.isPresent()) {
 			Car carData = car.get();
 			Person owner = carData.getOwner();
-			owner.setPersonCars(null);
-			carData.setOwner(owner);
+			if(owner != null) {
+				owner.setPersonCars(null);
+				carData.setOwner(owner);
+			}
 			return carData;
 		}
 		return null;
@@ -32,8 +35,10 @@ public class CarService {
 		List<Car> listCar = carRepository.findAll();
 		for(Car carData:listCar) {
 			Person owner = carData.getOwner();
-			owner.setPersonCars(null);
-			carData.setOwner(owner);
+			if(owner != null) {
+				owner.setPersonCars(null);
+				carData.setOwner(owner);
+			}
 		}
 		return listCar;
 	}
@@ -44,6 +49,28 @@ public class CarService {
 
 	public Car updateCar(Car car) {
 		return carRepository.save(car);
+	}
+
+	public void loadPrivateCarBrand() {
+		String carBrand[] = {"Maruti","Suzuki","Hyndui","Toyata"};
+		String color[] = {"Green", "Blue", "Red","Yellow"};
+		for(int i = 0; i<carBrand.length;i++) {
+			Car car = new Car();
+			car.setBrand(carBrand[i]);
+			car.setColor(color[i]);
+			carRepository.save(car);
+		}
+	}
+
+	public List<Car> availableCars() {
+		List<Car> listCar = carRepository.findAll();
+		List<Car> availableCar = new ArrayList<>(listCar.size());
+		for(Car car:listCar) {
+			if(car.getOwner() == null) {
+				availableCar.add(car);
+			}
+		}
+		return availableCar;
 	}
 
 }

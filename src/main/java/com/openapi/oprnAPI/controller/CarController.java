@@ -45,4 +45,9 @@ public class CarController {
 		Car = carService.updateCar(Car);
 		return Car;
 	}
+	
+	@GetMapping("/availablecar")
+	public List<Car> availableCar(){
+		return carService.availableCars();
+	}
 }
