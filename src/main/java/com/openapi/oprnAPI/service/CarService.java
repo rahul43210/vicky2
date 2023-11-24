@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.openapi.oprnAPI.model.Car;
+import com.openapi.oprnAPI.model.Person;
 import com.openapi.oprnAPI.repository.CarRepository;
 
 @Service
@@ -18,18 +19,27 @@ public class CarService {
 	public Car getCarById(Integer id) {
 		Optional<Car> car = carRepository.findById(id);
 		if(car.isPresent()) {
-			return car.get();
+			Car carData = car.get();
+			Person owner = carData.getOwner();
+			owner.setPersonCars(null);
+			carData.setOwner(owner);
+			return carData;
 		}
 		return null;
 	}
 
 	public List<Car> getAllCars() {
-		return carRepository.findAll();
+		List<Car> listCar = carRepository.findAll();
+		for(Car carData:listCar) {
+			Person owner = carData.getOwner();
+			owner.setPersonCars(null);
+			carData.setOwner(owner);
+		}
+		return listCar;
 	}
 
 	public void add(Car car) {
 		carRepository.save(car);
-		
 	}
 
 	public Car updateCar(Car car) {

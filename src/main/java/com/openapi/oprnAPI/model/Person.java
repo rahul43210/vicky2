@@ -23,7 +23,7 @@ public class Person {
 	private String lastName;
 	private String address;
 	
-	@OneToMany(mappedBy = "id", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
 	private Set<Car> personCars;
 	
 	public Set<Car> getPersonCars() {

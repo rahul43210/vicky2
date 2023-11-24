@@ -44,11 +44,11 @@ public class PersonController {
 	public Person updatePerson(@RequestBody Person person) {
 		person = personService.updatePerson(person);
 		return person;
-	}
+	}  
 	
 	@GetMapping("/addcar/{personId}/{carId}")
 	@ResponseStatus(code = HttpStatus.ACCEPTED)
-	public void addPersonCar(@PathVariable Integer personId, Integer carId) throws Exception {
+	public void purchaseCar(@PathVariable("personId") Integer personId,@PathVariable("carId") Integer carId) throws Exception {
 		personService.addCar(personId, carId);
 	}
 }

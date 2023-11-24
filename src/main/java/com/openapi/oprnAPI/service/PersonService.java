@@ -2,6 +2,7 @@ package com.openapi.oprnAPI.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,13 +24,27 @@ public class PersonService {
 	public Person getPersonById(Integer id) {
 		Optional<Person> person = personRepository.findById(id);
 		if(person.isPresent()) {
-			return person.get();
+			Person personData = person.get();
+			Set<Car> carList = personData.getPersonCars();
+			for(Car car:carList) {
+				car.setOwner(null);
+			}
+			personData.setPersonCars(carList);
+			return personData;
 		}
 		return null;
 	}
 
 	public List<Person> getAllPersons() {
-		return personRepository.findAll();
+		List<Person> listPerson = personRepository.findAll();
+		for(Person person : listPerson) {
+			Set<Car> carList = person.getPersonCars();
+			for(Car car:carList) {
+				car.setOwner(null);
+			}
+			person.setPersonCars(carList);
+		}
+		return listPerson;
 	}
 
 	public void add(Person person) {
